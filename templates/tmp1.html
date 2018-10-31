@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!--<link rel="icon" href="../../favicon.ico">-->
+
+  <title>  </title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <script src="http://cdn.bootcss.com/jquery/1.12.1/jquery.js"></script>
+  <script>
+      function query(){
+          var s1 = document.forms.input.s1.value;
+          var s2 = document.forms.input.s2.value;
+          var data = JSON.stringify({"city_name":s1, "date":s2});
+          $.ajax({
+              async: 'True',
+              url:'/',
+              type: 'POST',
+              contentType: "application/json;charset=utf-8",
+
+              data: data,
+              
+              success : function(response){
+                  var result = (response["result"])
+                  for (var i=0;i<result.length;i++) {
+                      if (result[i]=="\'") {
+                          result[i]='\"';
+                      } else if (result[i]=='\"') {
+                          result[i]="\'";
+                      }
+                  }
+                  json_obj = JSON.parse(result);
+                  document.getElementById('city_name').innerHTML = (json_obj["city_name"]);
+                  document.getElementById('specified_date').innerHTML = (json_obj["specified_date"]);
+                  document.getElementById('weather').innerHTML = (json_obj["weather"]);
+                  document.getElementById('lowest_t').innerHTML = (json_obj["lowest_t"]);
+                  document.getElementById('highest_t').innerHTML = (json_obj["highest_t"]);
+                  document.getElementById('wind_power').innerHTML = (json_obj["wind_power"]);
+                  document.getElementById('wind_direction').innerHTML = (json_obj["wind_direction"]);
+              },
+              error : function(data) {
+                  alert("查找失败")               
+              }
+
+          });
+      }
+
+  </script>
+</head>
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/index"> </a>
+    </div>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <div style='padding:30px'>
+    </div>
+    <form id='input'>
+      <div class="input-group ">
+        <span class="input-group-addon">请输入查询信息</span>
+        <input type="text"  style="width:70%" class="form-control" name='s1' placeholder="城市名称">&nbsp;
+        <input type="text"  style="width:70%" class="form-control" name='s2' placeholder="查询日期（昨天到大后天）">&nbsp;
+        <button type="button" onclick="query()" class="btn btn-default">查询</button>
+      </div>
+    </form>
+    <div class="panel panel-default">
+      <div class="panel-heading" id ='res_mark'>结果</div>
+      <div class="panel-body" id='result' style="width: 100%; overflow: auto">
+          <table sytle="width:4000px" border="1">
+              <tr>
+                  <th style="width: 100px">城市名称</th>
+                  <th><div class="panel-body" id='city_name' style="width: 200px; overflow: auto"></th>
+              </tr>
+              <tr>
+                  <th>查询日期</th>
+                  <th><div class="panel-body" id='specified_date' style="width: 100%; overflow: auto"></th>
+              </tr>
+              <tr>
+                  <th>天气情况</th>
+                  <th><div class="panel-body" id='weather' style="width: 100%; overflow: auto"></th>
+              </tr>
+              <tr>
+                  <th>最低温度</th>
+                  <th><div class="panel-body" id='lowest_t' style="width: 100%; overflow: auto"></th>
+              </tr>
+              <tr>
+                  <th>最高温度</th>
+                  <th><div class="panel-body" id='highest_t' style="width: 100%; overflow: auto"></th>
+              </tr>
+              <tr>
+                  <th>风力</th>
+                  <th><div class="panel-body" id='wind_power' style="width: 100%; overflow: auto"></th>
+              </tr>
+              <tr>
+                  <th>风向</th>
+                  <th><div class="panel-body" id='wind_direction' style="width: 100%; overflow: auto"></th>
+              </tr>
+         
+              
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
